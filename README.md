@@ -42,3 +42,24 @@ export const getServerSideProps: GetServerSideProps = async () => {
   }
 }
 ```
+
+### SSG (Static Site Generation)
+Salva o HTML de forma estática, isto pode evitar requisições HTTP desnecessárias e diminuir o consumo de recursos.  
+O `getStaticProps` vai ser executado uma vez e seu resultado vai ser salvo como uma página estática.  
+Pode ser utilizada a opção `revalidate`, que vai definir quanto tempo este HTML estático deve ser mantido até que seja gerado um novo documento com novos dados.
+
+```tsx
+import {GetStaticProps} from 'next'
+
+export const getStaticProps: GetStaticProps = async () => {
+  return {
+    props: {name: 'Some', age: 99},
+    revalidade: 60 * 60 * 24; // 24 horas até que um novo documento seja gerado
+  }
+}
+```
+
+### Quando utilizar?
+- SSG: Quando não existe problema caso a mesma página seja exibida para diferentes tipos de usuários.
+- SSR: Quando a página precisa de informações dinâmicas, dados diferentes de acordo com cada usuário.
+- Client-side: Quando os dados podem ser carregados depois da página ser renderizada sem causar grandes problemas.
