@@ -115,3 +115,77 @@ export const getStaticProps: GetStaticProps = async () => {
   export default MyApp
   ```
 - `pageProps.session` utilizado para receber informações da sessão ativa do usuário.
+
+### Utilizando os callbacks do next-auth para salvar dados no faunaDB
+[Callbacks](https://next-auth.js.org/configuration/callbacks) são funcões executadas como resposta de uma ação do next-auth. Utilize o callback `signIn` para salvar os dados do usuário, no faunaDB, durante o login.  
+
+```ts
+export default NextAuth({
+  // Configure one or more authentication providers
+  providers: [
+    Providers.GitHub({
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET,
+      scope: 'read:user'
+    }),
+  ],
+  callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      return true
+    },
+    async redirect({ url, baseUrl }) {
+      return baseUrl
+    },
+    async session({ session, user, token }) {
+      return session
+    },
+    async jwt({ token, user, account, profile, isNewUser }) {
+      return token
+    }
+  }
+})
+```
+
+> Tenha cuidado ao escolher uma região no FaunaDB. Cada região tem um **connection domain** único, [consulte](https://docs.fauna.com/fauna/current/api/fql/region_groups)
+
+| Region               | Connection domain |
+|----------------------|-------------------|
+| US region group      | db.us.fauna.com   |
+| EU region group      | db.eu.fauna.com   |
+| Classic region group | db.fauna.com      |
+
+```ts
+export const fauna = new Client({
+  secret: process.env.FAUNADB_KEY as string,
+  domain: 'db.fauna.com',
+})
+```
+
+> Erro de JWT veja [JSON Web Token Options](https://next-auth.js.org/configuration/options#json-web-token-options)
+
+### Realizando multiplas operações em uma única query do FaunaDB
+```ts
+import {query as q} from 'faunadb'
+await fauna.query(
+  q.If(
+    q.Not(
+      q.Exists(
+        q.Match(
+          q.Index('user_by_email'),
+          q.Casefold(user.email)
+        ) // Match
+      ) // Exists
+    ), // Not,
+    q.Create(
+      q.Collection('users'),
+      {data: {email}}
+    ), // Create
+    q.Get(
+      q.Match(
+        q.Index('user_by_email'),
+        q.Casefold(user.email)
+      ) // Match
+    )
+  ) //if
+)
+```
