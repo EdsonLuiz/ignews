@@ -63,3 +63,55 @@ export const getStaticProps: GetStaticProps = async () => {
 - SSG: Quando não existe problema caso a mesma página seja exibida para diferentes tipos de usuários.
 - SSR: Quando a página precisa de informações dinâmicas, dados diferentes de acordo com cada usuário.
 - Client-side: Quando os dados podem ser carregados depois da página ser renderizada sem causar grandes problemas.
+
+### Next-Auth
+- Adicione o pacote
+  ```shell
+  yarn add next-auth
+  ```
+- Cire uma api route `pages/api/auth/[...nextauth].ts`
+- Configure as keys no seu provider.
+- Adicione as keys no `.env`
+  ```
+  PROVIDER_ID=YOUR_CLIENT_ID
+  PROVIDER_SECRET=YOUR_CLIENT_SECRET
+  ```
+- Problemas ao seguir a documentação utilizando TypeScript? Olhe este [link](https://github.com/nextauthjs/next-auth/issues/210)
+- Configure da forma antiga.
+  ```tsx
+  import NextAuth from "next-auth"
+  import Providers from "next-auth/providers"
+
+  export default NextAuth({
+    // Configure one or more authentication providers
+    providers: [
+      Providers.GitHub({
+        clientId: process.env.GITHUB_ID,
+        clientSecret: process.env.GITHUB_SECRET,
+        scope: 'read:user'
+      }),
+      // ...add more providers here
+    ],
+  })
+  ```
+- Configure um escopo de acordo com as necessidades da aplicação. [github-scopes](https://docs.github.com/pt/developers/apps/building-oauth-apps/scopes-for-oauth-apps).
+- Para realizar `signIn` e `signOut` utilize a funções de mesmo nome do pacote `next-auth/client`. A função `signIn` recebe como parâmetro o nome do provider.
+- Utilize o hook `useSession`, do pacote `next-auth/client`, para recuperar dados da sessão do usuário logado.
+  ```ts
+  const [session] = useSession()
+  ```
+- Utilize a `ContextAPI` para compartilhar informações de autenticação entre os componentes.
+- O Next disponibiliza um Provider no pacote `next-auth/client`. Adicione este provider no arquivo `_app.tsx`.
+  ```tsx
+  import {Provider as NextAuthProvider} from 'next-auth/client'
+
+  function MyApp({ Component, pageProps }: AppProps) {
+    return (
+      <NextAuthProvider session={pageProps.session}>
+         ...
+      </NextAuthProvider>
+    )
+  }
+  export default MyApp
+  ```
+- `pageProps.session` utilizado para receber informações da sessão ativa do usuário.
