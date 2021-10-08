@@ -189,3 +189,17 @@ await fauna.query(
   ) //if
 )
 ```
+
+## Checkout session
+- Utilize o hook ***useSession()***, do pacote ***next-auth/client***, para verificar se o usuário está logado.  
+- Evite que variáveis do .env sejam utilizadas no front-end.
+- `NEXT_PUBLIC_` torna a váriavel pública para o front-end.
+- Operações que necessitam de mais segurança podem ser executadas no `getServerSideProps(SSR)`, `getStaticProps(SSG)` e nas `API Routes`.
+- `useSession()` é um hook e não funciona dentro de uma API Route, é preciso acessar o token do usuário e recuperar os dados do usuário logado de dentro do cookie. Podemos contornar esta recuperaçao via cookie utilizando o `getSession`, do pacote ***next-auth/client***, e receber os dados do usuário logado.
+  ```ts
+  import {getSession} from 'next-auth/client'
+  const session = await getSession({req})
+  ```
+
+
+Uma **checkout session** pode ser criada pelo método POST ou através da SDK do Stripe.
