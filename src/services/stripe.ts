@@ -23,9 +23,10 @@ export async function stripeCreateStripeCustomer({email}: User){
   return stripeCustomer
 }
 
-export async function stripeCreateCheckoutSession(stripeCustomerParam: Stripe.Response<Stripe.Customer>) {
+// export async function stripeCreateCheckoutSession(stripeCustomerParam: Stripe.Response<Stripe.Customer>) {
+export async function stripeCreateCheckoutSession(stripeCustomerId: string ) {
   const checkoutSession = await stripe.checkout.sessions.create({
-    customer: stripeCustomerParam.id,
+    customer: stripeCustomerId,
     payment_method_types: ['card'],
     billing_address_collection: 'required',
     line_items: [
