@@ -1,9 +1,10 @@
-import { queryForFieldOnFauna, saveSubscriptionOnFauna } from "../../../services/fauna";
+import { queryForFieldOnFauna, saveSubscriptionOnFauna, updateSubscriptionOnFauna } from "../../../services/fauna";
 import { stripe } from "../../../services/stripe";
 
 export async function saveSubscription(
   subscriptionId: string,
-  customerId: string
+  customerId: string,
+  createAction = false
 ) {
   // customerId is stripe_customer_id on FaunaDB
 
@@ -18,6 +19,10 @@ export async function saveSubscription(
     price_id: subscription.items.data[0].price.id
   }
 
-  saveSubscriptionOnFauna('subscriptions', newSubscriptionData)
+  if(createAction) {
+    await saveSubscriptionOnFauna('subscriptions', newSubscriptionData)
+  } else {
+    await updateSubscriptionOnFauna('subscription_by_id', subscriptionId, newSubscriptionData)
+  }
   
 }

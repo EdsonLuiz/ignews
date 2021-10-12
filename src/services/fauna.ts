@@ -64,3 +64,24 @@ export async function saveSubscriptionOnFauna(collectionName: string, subscripti
     )
   )
 }
+
+export async function updateSubscriptionOnFauna(
+  indexField: string,
+  match: string,
+  dataToReplace: any
+) {
+  await fauna.query(
+    q.Replace(
+      q.Select(
+        'ref',
+        q.Get(
+          q.Match(
+            q.Index(indexField),
+            match
+          )
+        )
+      ),
+      {data: dataToReplace}
+    )
+  )
+}
