@@ -24,6 +24,25 @@ export async function queryOnFauna<T>(indexField: string, matchTarget: string) {
   )
 }
 
+export async function queryForFieldOnFauna(
+  indexField: string, 
+  matchTarget: string,
+  returnField: string
+) {
+  return await fauna.query(
+    q.Select(
+      returnField,
+      q.Get(
+        q.Match(
+          q.Index(indexField),
+          matchTarget
+        )
+      )
+    )
+  ) 
+}
+
+
 export async function saveOnFauna(collectionName: string, refId: string, stripe_customer_id: string) {
   await fauna.query(
     q.Update(
@@ -33,6 +52,15 @@ export async function saveOnFauna(collectionName: string, refId: string, stripe_
           stripe_customer_id  
         }
       }
+    )
+  )
+}
+
+export async function saveSubscriptionOnFauna(collectionName: string, subscription: any) {
+  await fauna.query(
+    q.Create(
+      q.Collection(collectionName),
+      {data: subscription}
     )
   )
 }
