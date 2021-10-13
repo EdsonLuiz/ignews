@@ -203,3 +203,36 @@ await fauna.query(
 
 
 Uma **checkout session** pode ser criada pelo método POST ou através da SDK do Stripe.
+
+## JAM Stack
+- Javascript
+- API
+- Markup
+
+## CMS
+Mais conhecidos
+
+- Wordpress
+- Drupal
+- Joomla
+- Magento
+
+## Headless CMS (Painel de administração + API HTTP | GrapQL | SD)
+- Strapi
+- Ghost
+- eyStone
+- GraphCMS
+- Prismic CMS
+- ContentFull
+- Shopfy
+- Saleor
+
+## Prismic
+- `repository` são projetos no prismic.
+- `documents` são os conteúdos
+- `types` são os tipos de cada conteúdo, sempre no singular
+  - `repeatable` vários deste mesmo tipo (posts, produto)
+  - `single` só vai existir um deste tipo (títulos)
+
+Com os tipos de dados configurados é necessário configurar o acesso ao conteúdo. Por padrão o acesso a sua API é publico, caso seja necessário este comportamento pode ser alterado.
+- `settings > API & Security > Repository Security`
