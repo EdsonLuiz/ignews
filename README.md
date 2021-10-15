@@ -240,3 +240,8 @@ Com os tipos de dados configurados é necessário configurar o acesso ao conteú
 ## Prismic client
 - Documentação para inicializar a interface do prismic client. [lin](https://prismic.io/docs/technologies/how-to-query-the-api-reactjs#client)
 - Use `getStaticProps` para evitar buscar dados do prismic a todo o momento, preservando o seu limite de dados trafegados mensalmente.
+
+## Link ativo
+- 'useRouter' do pacote ***next/router*** utilizar ***asPath*** para para ter informação da rota que está sendo acessada.
+- Para evitar repetição de código pode ser criado um componente que devolve um **next/link** com a lógica de verificação de link ativo.
+- Dentro do novo componente pode ser utilizada a função 'cloneElement' do pacote ***react*** para adicionar propriedades ao children dentro de um componente.
