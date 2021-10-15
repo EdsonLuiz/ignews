@@ -236,3 +236,7 @@ Mais conhecidos
 
 Com os tipos de dados configurados é necessário configurar o acesso ao conteúdo. Por padrão o acesso a sua API é publico, caso seja necessário este comportamento pode ser alterado.
 - `settings > API & Security > Repository Security`
+
+## Prismic client
+- Documentação para inicializar a interface do prismic client. [lin](https://prismic.io/docs/technologies/how-to-query-the-api-reactjs#client)
+- Use `getStaticProps` para evitar buscar dados do prismic a todo o momento, preservando o seu limite de dados trafegados mensalmente.
