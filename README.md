@@ -245,3 +245,31 @@ Com os tipos de dados configurados é necessário configurar o acesso ao conteú
 - 'useRouter' do pacote ***next/router*** utilizar ***asPath*** para para ter informação da rota que está sendo acessada.
 - Para evitar repetição de código pode ser criado um componente que devolve um **next/link** com a lógica de verificação de link ativo.
 - Dentro do novo componente pode ser utilizada a função 'cloneElement' do pacote ***react*** para adicionar propriedades ao children dentro de um componente.
+
+## Notas sobre a criação da feature de Post
+- Toda página gerada de forma estática não pode ser protegida. Utilize ***getServerSideProps() SSR*** para gerar páginas protegidas do lado do servidor.
+- Busque a sessão com **getSession({req})** passando como argumento o **req** recebido como parâmetro no **getServerSideProps()**.
+  ```ts
+  export const getServerSideProps: GetServerSideProps = ({req}) = {
+    const session = getSession({req })
+  }
+  ```
+- Ao tentar buscar o **slug** dos parâmetros da requisição o TS pode apresentar alguns erros de lint. Para contornar estes erros declare uma interface que extende `ParsedUrlQuery` e contenha todos os parametros que a requisição pode receber.
+  ```tsx
+  import { ParsedUrlQuery } from 'querystring'
+
+  interface IParams extends ParsedUrlQuery {
+    slug: string
+  }
+
+  export const getServerSideProps: GetServerSideProps = async ({req, params}) => {
+    const session = await getSession({req})
+    const {slug} = params as IParams
+    ...
+  }
+  ```
+- `RichText.[asText, asHtml]` do pacote **prismic-dom** são utilizados para obter dados formatados da API do Prismic.
+- propriedade/ atributo `dangerouslySetInnerHTML` utilizada para renderizar conteúdo html.
+  ```tsx
+  <div dangerouslySetInnerHTML={{__html: content}} />
+  ```
