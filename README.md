@@ -273,3 +273,16 @@ Com os tipos de dados configurados é necessário configurar o acesso ao conteú
   ```tsx
   <div dangerouslySetInnerHTML={{__html: content}} />
   ```
+
+### Compartilhar informações pelo session
+- Dentro do Componente do nextAuth pode ser utilizado o callback ***session*** que permite modificar dados da sessão.
+- Redirecionamento dentro do método `getServerSideProps` basta não retornar as ***props*** e sim o ***redirect***.
+  ```ts
+  return {
+    redirect: {
+      destination: '/',
+      permanent: false  // não é permanente, mas um redirect que depende de uma action
+                        // indica para os indexadores que este redirect pode não existir ou acontecer
+    }
+  }
+  ```
